@@ -1,0 +1,40 @@
+<?php
+
+require("itemstorage.php");
+
+set_exception_handler(function ($e) {
+  $code = $e->getcode() ?: 400;
+  header("Content-Type: application/json", NULL, $code);
+  echo json_encode(["error" => $e->getMessage()]);
+  exit;
+});
+
+// assume Json, handle requests by verb and path
+$verb = $_server['Request_method'];
+$url_pieces = explode('/', $_Server['PATH_INFO']);
+$storage = new ItemStorage();
+
+// catch this here, we dont support many routes yet
+if($url_pieces[1] != 'items') {
+  throw new Exception('Unknown endpoint', 404);
+}
+
+switch($verb) {
+  case 'GET'
+  ...
+  break;
+  // two cases so similar we'll just share code
+  case 'POST':
+  case 'PUT':
+  ...
+  break;
+  case 'DELETE':
+  ...
+  default:
+    throw new Exception('Method Not Supported', 405);
+}
+
+// this is the output handler
+header("Content-Type: application/json");
+echo json_encode($data);
+ ?>
